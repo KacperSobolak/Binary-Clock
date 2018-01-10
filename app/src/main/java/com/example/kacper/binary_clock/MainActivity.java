@@ -1,6 +1,7 @@
 package com.example.kacper.binary_clock;
 
 import android.app.Activity;
+import android.nfc.Tag;
 import android.os.Bundle;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -32,6 +33,7 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     boolean a = false;
     boolean b = true;
+    boolean first = true;
 
     Gpio b1;
     Gpio b2;
@@ -46,11 +48,11 @@ public class MainActivity extends Activity {
     Gpio h_m;
     boolean h;
     int hour = 13;
-    int minutes = 13;
+    int minutes = 43;
 
     Handler handler = new Handler();
 
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
@@ -71,8 +73,7 @@ public class MainActivity extends Activity {
             b1.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
             h_m.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
             handler.post(Clock);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             Log.e(TAG, "Error on PeripheralIO API", e);
         }
     }
@@ -80,7 +81,7 @@ public class MainActivity extends Activity {
     private Runnable Clock = new Runnable() {
         @Override
         public void run() {
-            try{
+            try {
                 b1.setValue(a);
                 b2.setValue(a);
                 b4.setValue(a);
@@ -89,61 +90,74 @@ public class MainActivity extends Activity {
                 b32.setValue(a);
                 h_m.setValue(h);
                 int number;
-                if (h == false){
+                if (h == false) {
                     number = minutes;
-                    if (number - 32 >= 0){
+                    if (number - 32 >= 0) {
                         b32.setValue(true);
                         number = number - 32;
                     }
-                    if (number - 16 >= 0){
+                    if (number - 16 >= 0) {
                         b16.setValue(true);
                         number = number - 16;
                     }
-                    if (number - 8 >= 0){
+                    if (number - 8 >= 0) {
                         b8.setValue(true);
                         number = number - 8;
                     }
-                    if (number - 4 >= 0){
+                    if (number - 4 >= 0) {
                         b4.setValue(true);
                         number = number - 4;
                     }
-                    if (number - 2 >= 0){
+                    if (number - 2 >= 0) {
                         b2.setValue(true);
                         number = number - 2;
                     }
-                    if (number - 1 >= 0){
+                    if (number - 1 >= 0) {
                         b1.setValue(true);
                         number = number - 1;
                     }
-                }
-                else if (h){
+                } else if (h) {
                     number = hour;
-                    if (number - 16 >= 0){
+                    if (number - 16 >= 0) {
                         b16.setValue(true);
                         number = number - 16;
                     }
-                    if (number - 8 >= 0){
+                    if (number - 8 >= 0) {
                         b8.setValue(true);
                         number = number - 8;
                     }
-                    if (number - 4 >= 0){
+                    if (number - 4 >= 0) {
                         b4.setValue(true);
                         number = number - 4;
                     }
-                    if (number - 2 >= 0){
+                    if (number - 2 >= 0) {
                         b2.setValue(true);
                         number = number - 2;
                     }
-                    if (number - 1 >= 0){
+                    if (number - 1 >= 0) {
                         b1.setValue(true);
                         number = number - 1;
                     }
                 }
-                handler.postDelayed(Clock, 1000);
-            }catch (IOException e){
+                handler.postDelayed(Clock, 60000);
+            } catch (IOException e) {
                 Log.e(TAG, "Error on PeripheralIO API", e);
             }
+        }
+    };
 
+    private Runnable AddHour = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                if (first) {
+                    first = !first;
+                } else {
+
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error on PeripheralIO API", e);
+            }
         }
     };
 }
